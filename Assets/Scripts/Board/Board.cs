@@ -142,20 +142,45 @@ public class Board
 
     internal void FillGapsWithNewItems()
     {
+        Dictionary<NormalItem.eNormalType, int> typeCount = new Dictionary<NormalItem.eNormalType, int>();
+        foreach (NormalItem.eNormalType type in Enum.GetValues(typeof(NormalItem.eNormalType)))
+        {
+            typeCount[type] = 0;
+        }
+
+        for (int x = 0; x < boardSizeX; x++)
+        {
+            for (int y = 0; y < boardSizeY; y++)
+            {
+                Cell cell = m_cells[x, y];
+                if (!cell.IsEmpty && cell.Item is NormalItem normalItem)
+                {
+                    typeCount[normalItem.ItemType]++;
+                }
+            }
+        }
         for (int x = 0; x < boardSizeX; x++)
         {
             for (int y = 0; y < boardSizeY; y++)
             {
                 Cell cell = m_cells[x, y];
                 if (!cell.IsEmpty) continue;
-
+                List<NormalItem.eNormalType> prohibitedTypes = new List<NormalItem.eNormalType>();
+                if (cell.NeighbourUp?.Item is NormalItem upItem) prohibitedTypes.Add(upItem.ItemType);
+                if (cell.NeighbourRight?.Item is NormalItem rightItem) prohibitedTypes.Add(rightItem.ItemType);
+                if (cell.NeighbourBottom?.Item is NormalItem bottomItem) prohibitedTypes.Add(bottomItem.ItemType);
+                if (cell.NeighbourLeft?.Item is NormalItem leftItem) prohibitedTypes.Add(leftItem.ItemType);
+                NormalItem.eNormalType selectedType = typeCount
+                    .Where(kvp => !prohibitedTypes.Contains(kvp.Key))
+                    .OrderBy(kvp => kvp.Value)
+                    .First()
+                    .Key;
                 NormalItem item = new NormalItem();
-
-                item.SetType(Utils.GetRandomNormalType());
+                item.SetType(selectedType);
                 item.SetView();
                 item.SetViewRoot(m_root);
                 item.SetSkin(normalSkinConfig);
-
+                typeCount[selectedType]++;
 
                 cell.Assign(item);
                 cell.ApplyItemPosition(true);
