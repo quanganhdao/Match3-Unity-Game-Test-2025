@@ -7,6 +7,7 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     public event Action<eStateGame> StateChangedAction = delegate { };
+    [SerializeField] private NormalSkinConfig normalSkinConfig;
 
     public enum eLevelMode
     {
@@ -83,7 +84,7 @@ public class GameManager : MonoBehaviour
     public void LoadLevel(eLevelMode mode)
     {
         m_boardController = new GameObject("BoardController").AddComponent<BoardController>();
-        m_boardController.StartGame(this, m_gameSettings);
+        m_boardController.StartGame(this, m_gameSettings, normalSkinConfig);
 
         if (mode == eLevelMode.MOVES)
         {

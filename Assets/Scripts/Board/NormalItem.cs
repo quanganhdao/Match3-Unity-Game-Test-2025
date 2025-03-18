@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -58,5 +59,10 @@ public class NormalItem : Item
         NormalItem it = other as NormalItem;
 
         return it != null && it.ItemType == this.ItemType;
+    }
+
+    public void SetSkin(NormalSkinConfig config)
+    {
+        View.GetComponent<SpriteRenderer>().sprite = config.GetSprite(ItemType);
     }
 }

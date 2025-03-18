@@ -25,7 +25,9 @@ public class Board
 
     private int m_matchMin;
 
-    public Board(Transform transform, GameSettings gameSettings)
+    private NormalSkinConfig normalSkinConfig;
+
+    public Board(Transform transform, GameSettings gameSettings, NormalSkinConfig skinConfig)
     {
         m_root = transform;
 
@@ -35,7 +37,7 @@ public class Board
         this.boardSizeY = gameSettings.BoardSizeY;
 
         m_cells = new Cell[boardSizeX, boardSizeY];
-
+        normalSkinConfig = skinConfig;
         CreateBoard();
     }
 
@@ -103,6 +105,7 @@ public class Board
                 item.SetType(Utils.GetRandomNormalTypeExcept(types.ToArray()));
                 item.SetView();
                 item.SetViewRoot(m_root);
+                item.SetSkin(normalSkinConfig);
 
                 cell.Assign(item);
                 cell.ApplyItemPosition(false);
@@ -150,6 +153,8 @@ public class Board
                 item.SetType(Utils.GetRandomNormalType());
                 item.SetView();
                 item.SetViewRoot(m_root);
+                item.SetSkin(normalSkinConfig);
+
 
                 cell.Assign(item);
                 cell.ApplyItemPosition(true);
@@ -350,7 +355,7 @@ public class Board
         var dir = GetMatchDirection(matches);
 
         var bonus = matches.Where(x => x.Item is BonusItem).FirstOrDefault();
-        if(bonus == null)
+        if (bonus == null)
         {
             return matches;
         }

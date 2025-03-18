@@ -2350,6 +2350,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ed4360ab36daef4c9dd32250c4fa46d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  normalSkinConfig: {fileID: 11400000, guid: 970f5ff7e64bab044891f3ff304c1f14, type: 2}
   m_gameSettings: {fileID: 11400000, guid: 598718f9e5a14af49b65162e962b0ca1, type: 2}
 --- !u!4 &2136919903
 Transform:
