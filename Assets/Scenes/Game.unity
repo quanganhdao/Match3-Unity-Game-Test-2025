@@ -2352,6 +2352,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   normalSkinConfig: {fileID: 11400000, guid: 970f5ff7e64bab044891f3ff304c1f14, type: 2}
   m_gameSettings: {fileID: 11400000, guid: 598718f9e5a14af49b65162e962b0ca1, type: 2}
+  prefabBG: {fileID: 1645311756642076403, guid: 36ec5f479201921458e80cc24e85189a,
+    type: 3}
 --- !u!4 &2136919903
 Transform:
   m_ObjectHideFlags: 0

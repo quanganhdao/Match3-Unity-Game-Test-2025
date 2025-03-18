@@ -26,9 +26,11 @@ public class Board
     private int m_matchMin;
 
     private NormalSkinConfig normalSkinConfig;
+    private GameObject prefabBG;
 
-    public Board(Transform transform, GameSettings gameSettings, NormalSkinConfig skinConfig)
+    public Board(Transform transform, GameSettings gameSettings, NormalSkinConfig skinConfig, GameObject prefabBG)
     {
+        this.prefabBG = prefabBG;
         m_root = transform;
 
         m_matchMin = gameSettings.MatchesMin;
@@ -44,7 +46,6 @@ public class Board
     private void CreateBoard()
     {
         Vector3 origin = new Vector3(-boardSizeX * 0.5f + 0.5f, -boardSizeY * 0.5f + 0.5f, 0f);
-        GameObject prefabBG = Resources.Load<GameObject>(Constants.PREFAB_CELL_BACKGROUND);
         for (int x = 0; x < boardSizeX; x++)
         {
             for (int y = 0; y < boardSizeY; y++)
