@@ -47,6 +47,8 @@ public class GameManager : MonoBehaviour
 
     private LevelCondition m_levelCondition;
 
+    private eLevelMode currentMode;
+
     private void Awake()
     {
         State = eStateGame.SETUP;
@@ -84,6 +86,7 @@ public class GameManager : MonoBehaviour
 
     public void LoadLevel(eLevelMode mode)
     {
+        currentMode = mode;
         m_boardController = new GameObject("BoardController").AddComponent<BoardController>();
         m_boardController.StartGame(this, m_gameSettings, normalSkinConfig, prefabBG);
 
@@ -136,5 +139,11 @@ public class GameManager : MonoBehaviour
             Destroy(m_levelCondition);
             m_levelCondition = null;
         }
+    }
+
+    public void RestartLevel()
+    {
+        ClearLevel();
+        LoadLevel(currentMode);
     }
 }
