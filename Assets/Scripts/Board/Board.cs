@@ -40,17 +40,22 @@ public class Board
 
         m_cells = new Cell[boardSizeX, boardSizeY];
         normalSkinConfig = skinConfig;
-        CreateBoard();
+
     }
 
-    private void CreateBoard()
+    public void CreateBoard()
     {
+        if (isInitialized == false)
+        {
+
+            InitializeCellPool();
+        }
         Vector3 origin = new Vector3(-boardSizeX * 0.5f + 0.5f, -boardSizeY * 0.5f + 0.5f, 0f);
         for (int x = 0; x < boardSizeX; x++)
         {
             for (int y = 0; y < boardSizeY; y++)
             {
-                GameObject go = GameObject.Instantiate(prefabBG);
+                GameObject go = GetCellFromPool();
                 go.transform.position = origin + new Vector3(x, y, 0f);
                 go.transform.SetParent(m_root);
 
@@ -700,9 +705,47 @@ public class Board
                 Cell cell = m_cells[x, y];
                 cell.Clear();
 
-                GameObject.Destroy(cell.gameObject);
-                m_cells[x, y] = null;
+                ReturnCellToPool(cell.gameObject);
+                // m_cells[x, y] = null;
             }
         }
     }
+
+    private Queue<GameObject> cellPool = new Queue<GameObject>();
+
+    private bool isInitialized;
+    private void InitializeCellPool()
+    {
+        int INITIAL_POOL_SIZE = boardSizeX * boardSizeY;
+        for (int i = 0; i < INITIAL_POOL_SIZE; i++)
+        {
+            GameObject cell = GameObject.Instantiate(prefabBG);
+            cell.SetActive(false);
+            cell.transform.SetParent(m_root);
+            cellPool.Enqueue(cell);
+        }
+        isInitialized = true;
+    }
+
+    private GameObject GetCellFromPool()
+    {
+        if (cellPool.Count > 0)
+        {
+            GameObject cell = cellPool.Dequeue();
+            cell.SetActive(true);
+            return cell;
+        }
+
+        // If pool is empty, create new cell
+        GameObject newCell = GameObject.Instantiate(prefabBG);
+        newCell.transform.SetParent(m_root);
+        return newCell;
+    }
+
+    private void ReturnCellToPool(GameObject cell)
+    {
+        cell.SetActive(false);
+        cellPool.Enqueue(cell);
+    }
+
 }

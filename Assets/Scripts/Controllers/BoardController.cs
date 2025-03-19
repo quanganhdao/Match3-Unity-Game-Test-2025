@@ -40,9 +40,11 @@ public class BoardController : MonoBehaviour
         m_gameManager.StateChangedAction += OnGameStateChange;
 
         m_cam = Camera.main;
-
-        m_board = new Board(this.transform, gameSettings, normalSkinConfig, prefabBG);
-
+        if (m_board == null)
+        {
+            m_board = new Board(this.transform, gameSettings, normalSkinConfig, prefabBG);
+        }
+        m_board.CreateBoard();
         Fill();
     }
 
@@ -58,6 +60,7 @@ public class BoardController : MonoBehaviour
         {
             case GameManager.eStateGame.GAME_STARTED:
                 IsBusy = false;
+                m_gameOver = false;
                 break;
             case GameManager.eStateGame.PAUSE:
                 IsBusy = true;
@@ -72,10 +75,11 @@ public class BoardController : MonoBehaviour
 
     public void Update()
     {
+        // Debug.Log($"IsBusy: {IsBusy} m_gameOver: {m_gameOver}");
         if (m_gameOver) return;
         if (IsBusy) return;
 
-        if (!m_hintIsShown)
+        if (!m_hintIsShown && m_gameSettings != null)
         {
             m_timeAfterFill += Time.deltaTime;
             if (m_timeAfterFill > m_gameSettings.TimeForHint)
@@ -85,9 +89,10 @@ public class BoardController : MonoBehaviour
             }
         }
 
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && m_cam != null)
         {
             var hit = Physics2D.Raycast(m_cam.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
+            // Debug.Log(hit.collider.name);
             if (hit.collider != null)
             {
                 m_isDragging = true;

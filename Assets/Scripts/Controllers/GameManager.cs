@@ -41,7 +41,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject prefabBG;
 
 
-    private BoardController m_boardController;
+    [SerializeField] private BoardController m_boardController;
 
     private UIMainManager m_uiMenu;
 
@@ -87,7 +87,7 @@ public class GameManager : MonoBehaviour
     public void LoadLevel(eLevelMode mode)
     {
         currentMode = mode;
-        m_boardController = new GameObject("BoardController").AddComponent<BoardController>();
+        // m_boardController = new GameObject("BoardController").AddComponent<BoardController>();
         m_boardController.StartGame(this, m_gameSettings, normalSkinConfig, prefabBG);
 
         if (mode == eLevelMode.MOVES)
@@ -116,8 +116,6 @@ public class GameManager : MonoBehaviour
         if (m_boardController)
         {
             m_boardController.Clear();
-            Destroy(m_boardController.gameObject);
-            m_boardController = null;
         }
     }
 

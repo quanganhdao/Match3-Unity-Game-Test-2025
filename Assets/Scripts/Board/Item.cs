@@ -128,7 +128,7 @@ public class Item
 
     internal void Clear()
     {
-        Cell = null;
+        // Cell = null;
 
         if (View)
         {
