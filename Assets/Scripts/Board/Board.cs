@@ -27,6 +27,8 @@ public class Board
 
     private NormalSkinConfig normalSkinConfig;
     private GameObject prefabBG;
+    private Queue<NormalItem> normalItemPool = new Queue<NormalItem>();
+    private const int INITIAL_NORMAL_ITEM_POOL_SIZE = 100;
 
     public Board(Transform transform, GameSettings gameSettings, NormalSkinConfig skinConfig, GameObject prefabBG)
     {
@@ -42,6 +44,48 @@ public class Board
         normalSkinConfig = skinConfig;
 
     }
+    private void InitializeNormalItemPool()
+    {
+        Debug.Log("InitializeNormalItemPool");
+        for (int i = 0; i < INITIAL_NORMAL_ITEM_POOL_SIZE; i++)
+        {
+            NormalItem item = new NormalItem();
+            item.SetView();
+            item.View.gameObject.SetActive(false);
+            Debug.Log("Created new Item");
+            normalItemPool.Enqueue(item);
+        }
+    }
+    private NormalItem GetNormalItemFromPool()
+    {
+        NormalItem item;
+        if (normalItemPool.Count > 0)
+        {
+            item = normalItemPool.Dequeue();
+            Debug.Log("Dequeue item");
+
+            // item.View.gameObject.SetActive(true);
+        }
+        else
+        {
+            item = new NormalItem();
+            Debug.Log("Created new Item 2");
+
+            // item.SetViewRoot(m_root);
+            // item.SetSkin(normalSkinConfig);
+            // item.SetView();
+        }
+        return item;
+    }
+    private void ReturnNormalItemToPool(NormalItem item)
+    {
+        if (item != null && item.View != null)
+        {
+            item.View.gameObject.SetActive(false);
+            normalItemPool.Enqueue(item);
+        }
+        Debug.Log("ReturnNormalItemToPool");
+    }
 
     public void CreateBoard()
     {
@@ -49,6 +93,8 @@ public class Board
         {
 
             InitializeCellPool();
+            InitializeNormalItemPool();
+            isInitialized = true;
         }
         Vector3 origin = new Vector3(-boardSizeX * 0.5f + 0.5f, -boardSizeY * 0.5f + 0.5f, 0f);
         for (int x = 0; x < boardSizeX; x++)
@@ -87,7 +133,9 @@ public class Board
             for (int y = 0; y < boardSizeY; y++)
             {
                 Cell cell = m_cells[x, y];
-                NormalItem item = new NormalItem();
+                NormalItem item = GetNormalItemFromPool();
+
+                // item.View.gameObject.SetActive(false);
 
                 List<NormalItem.eNormalType> types = new List<NormalItem.eNormalType>();
                 if (cell.NeighbourBottom != null)
@@ -109,10 +157,13 @@ public class Board
                 }
 
                 item.SetType(Utils.GetRandomNormalTypeExcept(types.ToArray()));
-                item.SetView();
-                item.SetViewRoot(m_root);
-                item.SetSkin(normalSkinConfig);
 
+                Debug.Log("root " + m_root.name);
+                item.SetView();
+                item.SetSkin(normalSkinConfig);
+                item.View.gameObject.SetActive(true);
+
+                item.SetViewRoot(m_root);
                 cell.Assign(item);
                 cell.ApplyItemPosition(false);
             }
@@ -180,7 +231,7 @@ public class Board
                     .OrderBy(kvp => kvp.Value)
                     .First()
                     .Key;
-                NormalItem item = new NormalItem();
+                NormalItem item = GetNormalItemFromPool();
                 item.SetType(selectedType);
                 item.SetView();
                 item.SetViewRoot(m_root);
@@ -189,8 +240,11 @@ public class Board
 
                 cell.Assign(item);
                 cell.ApplyItemPosition(true);
+
+
             }
         }
+
     }
 
     internal void ExplodeAllItems()
@@ -703,10 +757,12 @@ public class Board
             for (int y = 0; y < boardSizeY; y++)
             {
                 Cell cell = m_cells[x, y];
-                cell.Clear();
-
+                if (cell.Item is NormalItem normalItem)
+                {
+                    ReturnNormalItemToPool(normalItem);
+                }
+                 //cell.Clear();
                 ReturnCellToPool(cell.gameObject);
-                // m_cells[x, y] = null;
             }
         }
     }
@@ -724,7 +780,6 @@ public class Board
             cell.transform.SetParent(m_root);
             cellPool.Enqueue(cell);
         }
-        isInitialized = true;
     }
 
     private GameObject GetCellFromPool()

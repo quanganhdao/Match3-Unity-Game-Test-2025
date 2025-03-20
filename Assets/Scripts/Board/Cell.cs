@@ -59,7 +59,7 @@ public class Cell : MonoBehaviour
         if (Item != null)
         {
             Item.Clear();
-            Item = null;
+            // Item = null;
         }
     }
 

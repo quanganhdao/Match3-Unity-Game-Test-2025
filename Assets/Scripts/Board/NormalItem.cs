@@ -15,7 +15,16 @@ public class NormalItem : Item
         TYPE_SIX,
         TYPE_SEVEN
     }
-
+    public override void SetView()
+    {
+        if (View != null)
+        {
+            Debug.Log("view of normal: " + View.name);
+            View.gameObject.SetActive(true);
+            return;
+        }
+        base.SetView();
+    }
     public eNormalType ItemType;
 
     public void SetType(eNormalType type)
@@ -37,6 +46,7 @@ public class NormalItem : Item
 
     public void SetSkin(NormalSkinConfig config)
     {
+        // Debug.Log("SetSkin " + config.name);
         View.GetComponent<SpriteRenderer>().sprite = config.GetSprite(ItemType);
     }
 }
