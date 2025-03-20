@@ -52,7 +52,7 @@ public class Board
             NormalItem item = new NormalItem();
             item.SetView();
             item.View.gameObject.SetActive(false);
-            Debug.Log("Created new Item");
+            //Debug.Log("Created new Item");
             normalItemPool.Enqueue(item);
         }
     }
@@ -62,14 +62,14 @@ public class Board
         if (normalItemPool.Count > 0)
         {
             item = normalItemPool.Dequeue();
-            Debug.Log("Dequeue item");
+            //Debug.Log("Dequeue item");
 
             // item.View.gameObject.SetActive(true);
         }
         else
         {
             item = new NormalItem();
-            Debug.Log("Created new Item 2");
+            //Debug.Log("Created new Item 2");
 
             // item.SetViewRoot(m_root);
             // item.SetSkin(normalSkinConfig);
@@ -158,7 +158,7 @@ public class Board
 
                 item.SetType(Utils.GetRandomNormalTypeExcept(types.ToArray()));
 
-                Debug.Log("root " + m_root.name);
+                //Debug.Log("root " + m_root.name);
                 item.SetView();
                 item.SetSkin(normalSkinConfig);
                 item.View.gameObject.SetActive(true);

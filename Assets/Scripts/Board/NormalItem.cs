@@ -19,7 +19,7 @@ public class NormalItem : Item
     {
         if (View != null)
         {
-            Debug.Log("view of normal: " + View.name);
+            //Debug.Log("view of normal: " + View.name);
             View.gameObject.SetActive(true);
             return;
         }

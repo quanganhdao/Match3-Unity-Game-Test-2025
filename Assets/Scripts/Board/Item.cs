@@ -24,7 +24,7 @@ public class Item
             if (prefab)
             {
                 View = GameObject.Instantiate(prefab).transform;
-                Debug.Log("Instantiate more Successfully ");
+                //Debug.Log("Instantiate more Successfully ");
                 // Debug.Log("SetView Successfully ");
             }
         }
