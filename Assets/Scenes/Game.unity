@@ -2611,6 +2611,7 @@ MonoBehaviour:
   prefabBG: {fileID: 1645311756642076403, guid: 36ec5f479201921458e80cc24e85189a,
     type: 3}
   m_boardController: {fileID: 764049470}
+  m_uiMenu: {fileID: 2110808864}
 --- !u!4 &2136919903
 Transform:
   m_ObjectHideFlags: 0

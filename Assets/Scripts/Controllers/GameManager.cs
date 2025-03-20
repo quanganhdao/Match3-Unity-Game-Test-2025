@@ -43,7 +43,7 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private BoardController m_boardController;
 
-    private UIMainManager m_uiMenu;
+    [SerializeField] private UIMainManager m_uiMenu;
 
     private LevelCondition m_levelCondition;
 
@@ -54,7 +54,7 @@ public class GameManager : MonoBehaviour
         State = eStateGame.SETUP;
 
 
-        m_uiMenu = FindObjectOfType<UIMainManager>();
+        // m_uiMenu = FindObjectOfType<UIMainManager>();
         m_uiMenu.Setup(this);
     }
 
